@@ -139,7 +139,7 @@ int main()
 
         tabela[pos] = valor;
         
-        }
+    }
 
         for(int i = 0; i < m; i++)
         {
