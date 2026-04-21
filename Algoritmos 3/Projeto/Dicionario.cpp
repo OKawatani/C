@@ -1,17 +1,105 @@
+// Marcelo Kian Abate Dantas 733 GES
+// Pedro Paulo Castro Brito 2425 GEC
+// Eduardo Kawatani Rios 668 GES
+// Antonio Lucas Oshiro Rezende Teixeira 2363 GEC
+// Vitor Augusto do Couto 536 GES
+
 #include <iostream>
 #include <cstdlib>
+#include <list>
+#include <string>
 using namespace std;
 
+struct Aresta {
+    string significado;
+    string destino;
+};
+
+struct No {
+    string palavraFicticia;
+    string palavraPortugues;
+    string palavraSignificado;
+    float x, y, z;
+    list<Aresta> adjacencias;
+};
+
+list<No> grafo;
+
 void cadastrarPalavra() {
-    cout << "Funcionalidade em construcao\n";
+    No novo;
+    cout << "Palavra Ficticia: "; cin >> novo.palavraFicticia;
+    cout << "Traducao (Portugues): "; cin >> novo.palavraPortugues;
+    cout << "Coordenadas (x y z): "; cin >> novo.x >> novo.y >> novo.z;
+    cout << "Significado: "; cin >> novo.palavraSignificado;
+
+    Aresta relacao;
+    relacao.destino = novo.palavraSignificado;
+    
+    novo.adjacencias.push_back(relacao);
+
+    grafo.push_back(novo);
+    cout << "Palavra registrada!\n";
 }
 
 void listarSignificados() {
-    cout << "Funcionalidade em construcao\n";
+    string busca;
+    cout << "Digite a palavra para ver os significados: ";
+    cin >> busca;
+
+    list<No>::iterator it;
+    for (it = grafo.begin(); it != grafo.end(); ++it) {
+        if (it->palavraFicticia == busca) {
+            cout << "Significado de: " << busca;
+            
+            list<Aresta>::iterator ita;
+            for (ita = it->adjacencias.begin(); ita != it->adjacencias.end(); ++ita) {
+                cout << ": " << ita->significado << ita->destino << ")\n";
+            }
+            return;
+        }
+    }
+    cout << "Palavra nao encontrada.\n";
 }
 
 void listarSinonimos() {
-    cout << "Funcionalidade em construcao\n";
+    string busca;
+    cout << "Digite a palavra para buscar sinonimos: ";
+    cin >> busca;
+
+    string significadoBase = "";
+    bool encontrou = false;
+
+    list<No>::iterator it;
+
+    for (it = grafo.begin(); it != grafo.end(); ++it) {
+        if (it->palavraFicticia == busca) {
+            significadoBase = it->palavraPortugues;
+            encontrou = true;
+            break;
+        }
+    }
+
+    if (!encontrou) {
+        cout << "Palavra nao encontrada.\n";
+        return;
+    }
+
+    cout << "Sinonimos de " << busca << ":\n";
+
+    bool temSinonimo = false;
+
+    for (it = grafo.begin(); it != grafo.end(); ++it) {
+        if (it->palavraFicticia != busca &&
+            it->palavraPortugues == significadoBase) {
+
+            cout << "- " << it->palavraFicticia << endl;
+            temSinonimo = true;
+        }
+    }
+
+    if (!temSinonimo) {
+        cout << "Nenhum sinonimo encontrado.\n";
+    }
 }
 
 void listarOrdemAlfabetica() {
@@ -31,6 +119,7 @@ void calcularSimilaridade() {
 }
 
 int main() {
+	
     int opcao;
 
     do {
@@ -45,9 +134,15 @@ int main() {
         cout << "6. Remover palavra\n";
         cout << "7. Calcular similaridade entre duas palavras\n";
         cout << "0. Sair\n";
-        cout << "Escolha uma opcao: ";
-        cin >> opcao;
-
+		cout << "Escolha uma opcao: ";
+		// Bloqueia caso a resposta seja uma string ou char
+		while (!(cin >> opcao)) { 
+		    cin.clear(); 
+		    cin.ignore(1000, '\n'); 
+		    cout << "ERRO: Digite apenas numeros!\n";
+		    cout << "Escolha uma opcao: ";
+		}
+		// ================================================
         system("cls");
 
         switch(opcao) {
