@@ -11,7 +11,6 @@
 using namespace std;
 
 struct Aresta {
-    string significado;
     string destino;
 };
 
@@ -53,7 +52,7 @@ void listarSignificados() {
             
             list<Aresta>::iterator ita;
             for (ita = it->adjacencias.begin(); ita != it->adjacencias.end(); ++ita) {
-                cout << ": " << ita->significado << ita->destino << ")\n";
+                cout << ": " << ita->destino << "\n";
             }
             return;
         }
@@ -73,7 +72,7 @@ void listarSinonimos() {
 
     for (it = grafo.begin(); it != grafo.end(); ++it) {
         if (it->palavraFicticia == busca) {
-            significadoBase = it->palavraPortugues;
+            significadoBase = it->palavraSignificado; 
             encontrou = true;
             break;
         }
@@ -90,7 +89,7 @@ void listarSinonimos() {
 
     for (it = grafo.begin(); it != grafo.end(); ++it) {
         if (it->palavraFicticia != busca &&
-            it->palavraPortugues == significadoBase) {
+            it->palavraSignificado == significadoBase) {
 
             cout << "- " << it->palavraFicticia << endl;
             temSinonimo = true;
