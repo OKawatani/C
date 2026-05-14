@@ -63,13 +63,13 @@ treenodeptr tPointSmaller(treenodeptr &p){
     }
 }
 
-bool tRemove(treenodeptr &p, string nome){
+bool tRemove(treenodeptr &p, string nome, string tipo){
         
     treenodeptr t;
         
     if(p == NULL)return false;
         
-    if(nome == p->info.nome){
+    if(nome == p->info.nome && tipo == p->info.tipo){
             
         t = p;
             
@@ -90,14 +90,14 @@ bool tRemove(treenodeptr &p, string nome){
         return true;
     }
 
-    else if(nome < p->info.nome) return tRemove(p->left,nome);
-    else return tRemove(p->right,nome);
+    else if(nome < p->info.nome) return tRemove(p->left,nome, tipo);
+    else return tRemove(p->right,nome, tipo);
 }
 
 int main(){
 
     int x;
-    string nome;
+    string nome, tipo;
     treenode *p = NULL;
     dados pedra;
 
@@ -120,13 +120,13 @@ int main(){
                 cout << "Tipo: " << result->info.tipo << endl;
             }
             else{
-                cout << "ROcha nao encontrada" << endl;
+                cout << "Rocha nao encontrada" << endl;
             }
         }
 
         if(x == 3){
-            cin >> nome;
-            bool result = tRemove(p, nome);
+            cin >> nome >> tipo;
+            bool result = tRemove(p, nome, tipo);
             
             if(result){
                 cout << "Rocha removida com sucesso" << endl;
