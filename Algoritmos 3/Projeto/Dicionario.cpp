@@ -10,6 +10,8 @@
 #include <string>
 using namespace std;
 
+typedef struct treenode* treenodeptr;
+
 struct Aresta {
     string destino;
 };
@@ -22,10 +24,38 @@ struct No {
     list<Aresta> adjacencias;
 };
 
+struct treenode{
+    No info;
+    struct treenode *left;
+    struct treenode *right;
+};
+
 list<No> grafo;
 
-void cadastrarPalavra() {
+//Funções de árvore
+
+void tInsert(treenodeptr &p, No x){
+
+    if(p == NULL){
+        p = new treenode;
+        p->info = x;
+        p->left = NULL;
+        p->right = NULL;
+    }
+    else if(x.palavraFicticia < p->info.palavraFicticia){
+        tInsert(p->left, x);
+    }
+    else if(x.palavraFicticia > p->info.palavraFicticia){
+        tInsert(p->right, x);
+    }
+}
+
+//---------------------------------------------------------------------
+
+void cadastrarPalavra(treenodeptr &p) {
     No novo;
+    
+
     cout << "Palavra Ficticia: "; cin >> novo.palavraFicticia;
     cout << "Traducao (Portugues): "; cin >> novo.palavraPortugues;
     cout << "Coordenadas (x y z): "; cin >> novo.x >> novo.y >> novo.z;
@@ -37,6 +67,10 @@ void cadastrarPalavra() {
     novo.adjacencias.push_back(relacao);
 
     grafo.push_back(novo);
+
+    tInsert(p, novo);
+
+
     cout << "Palavra registrada!\n";
 }
 
@@ -101,8 +135,20 @@ void listarSinonimos() {
     }
 }
 
-void listarOrdemAlfabetica() {
-    cout << "Funcionalidade em construcao\n";
+void percorrerArvore(treenodeptr p) {
+    if (p != NULL) {
+        percorrerArvore(p->left);
+        cout << p->info.palavraFicticia << endl;
+        percorrerArvore(p->right);
+    }
+}
+
+void listarOrdemAlfabetica(treenodeptr p) {
+    if (p == NULL) {
+        cout << "Cadastre palavras primeiro" << endl;
+    } else {
+        percorrerArvore(p);
+    }
 }
 
 void listarPorTamanho() {
@@ -120,6 +166,7 @@ void calcularSimilaridade() {
 int main() {
 	
     int opcao;
+    treenode *p = NULL;
 
     do {
         system("cls");
@@ -145,10 +192,10 @@ int main() {
         system("cls");
 
         switch(opcao) {
-            case 1: cadastrarPalavra(); break;
+            case 1: cadastrarPalavra(p); break;
             case 2: listarSignificados(); break;
             case 3: listarSinonimos(); break;
-            case 4: listarOrdemAlfabetica(); break;
+            case 4: listarOrdemAlfabetica(p); break;
             case 5: listarPorTamanho(); break;
             case 6: removerPalavra(); break;
             case 7: calcularSimilaridade(); break;
